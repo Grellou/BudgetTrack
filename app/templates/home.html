@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Budget Tracker{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header text-center">
+        <h2><i class="fas fa-wallet me-2"></i>Welcome to Budget Tracker</h2>
+      </div>
+      <div class="card-body">
+        <div class="text-center mb-4">
+          <p class="lead">Take control of your finances and build brighter future.</p>
+          <p>Track your expenses, manage your income, and stay on top of your financial goals.</p>
+        </div>
+
+        {% if current_user.is_authenticated %}
+        <div class="row mt-4">
+          <div class="col-md-6 mb-4">
+            <div class="card h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-chart-line fa-3x mb-4 text-primary"></i>
+                <h4>View your dashboard</h4>
+                <p>See your financial overview and recent expenses</p>
+                <a href="#" class="btn text-primary">Go to dashboard</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="card h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-plus-circle fa-3x mb-3 text-primary"></i>
+                <h4>Add transaction</h4>
+                <p>Record your income or expenses</p>
+                <div class="d-grid gap-2">
+                  <a class="btn btn-outline-primary" href="#">Add expense</a>
+                  <a class="btn btn-outline-primary" href="#">Add income</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="row mt-4">
+          <div class="col-md-6 mb-3">
+            <div class="card h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-user-plus fa-3x mb-3 text-primary"></i>
+                <h4>New User?</h4>
+                <p>Create an account to start tracking your finances</p>
+                <a class="btn btn-primary" href="{{ url_for('auth.register_page') }}">Register</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="card h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-sign-in-alt fa-3x mb-3 text-primary"></i>
+                <h4>Returning User?</h4>
+                <p>Access your financial dashboard</p>
+                <a class="btn btn-primary" href="{{ url_for('auth.login_page') }}">Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <div class="card-footer text-center">
+        <p>Budget Tracker helps you make smarter financial decisions every day.</p>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+          <div class="card-body">
+            <i class="fas fa-money-bill-wave fa-2x mb-3 text-success"></i>
+            <h5>Track Expenses</h5>
+            <p>Monitor where your money goes with detailed categorization</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+          <div class="card-body">
+            <i class="fas fa-piggy-bank fa-2x mb-3 text-info"></i>
+            <h5>Set Goals</h5>
+            <p>Create saving goals and track your progress</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card text-center h-100">
+          <div class="card-body">
+            <i class="fas fa-chart-pie fa-2x mb-3 text-warning"></i>
+            <h5>Visualize Data</h5>
+            <p>See your spendings with intuitive charts</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
