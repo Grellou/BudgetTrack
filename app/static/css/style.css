@@ -115,6 +115,32 @@ body {
     border-color: rgba(79, 195, 247, 0.4);
 }
 
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+  width: 100%;
+}
+
+.alert-dismissible {
+  padding-right: 3rem; /* Provide space for close button */
+}
+
+.alert-dismissible .btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.75rem 1.25rem;
+  color: inherit;
+}
+
+.alert-content {
+  flex: 1;
+}
+
 /* Links */
 a {
     color: var(--accent);
@@ -157,4 +183,78 @@ footer {
     .auth-card {
         margin-top: 1rem;
     }
+}
+
+/* Table styles for dark theme */
+.table {
+  color: var(--text-primary);  /* Use the same light text color as rest of the theme */
+}
+
+.table thead {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.table th {
+  font-weight: 600;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.table td {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Better hover effect for dark theme */
+.table-hover tbody tr:hover {
+  background-color: rgba(100, 181, 246, 0.25) !important;
+  color: #ffffff !important; /* Pure white with !important */
+}
+
+.table-hover tbody tr:hover td {
+  color: #ffffff !important;
+}
+
+.table-hover tbody tr:hover a {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+.table-hover tbody tr:hover .badge {
+  border: 1px solid white;
+}
+
+/* Badge contrast improvements */
+.badge.bg-success {
+  color: #ffffff;
+}
+
+.badge.bg-secondary {
+  color: #ffffff;
+}
+
+/* Action buttons more visible */
+.btn-outline-primary, .btn-outline-danger {
+  border-width: 2px;
+}
+
+.btn-outline-primary:hover, .btn-outline-danger:hover {
+  color: #ffffff;
+}
+
+/* Better styled category counter */
+.badge.rounded-pill {
+  padding: 0.35em 0.65em;
+  font-weight: 400;
+  vertical-align: middle;
+}
+
+.badge.bg-info {
+  background-color: rgba(100, 181, 246, 0.8) !important;
+  color: #ffffff;
+}
+
+/* Ensure proper vertical alignment with heading */
+h3 .badge {
+  position: relative;
+  top: -2px;
 }

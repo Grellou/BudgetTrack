@@ -8,6 +8,7 @@ import logging
 
 bp = Blueprint("auth", __name__)
 
+# Register new account
 @bp.route("/register", methods=["GET", "POST"])
 def register_page():
     # Redirect if user already logged in
@@ -23,7 +24,7 @@ def register_page():
             email_address=form.email_address.data # type: ignore
         )
         user.set_password(form.password1.data)
-        
+
         # Add to db
         try:
             db.session.add(user)
@@ -33,10 +34,11 @@ def register_page():
         except SQLAlchemyError as e:
             db.session.rollback()
             flash("An error occurred during registration. Please try again.", "danger")
-            logging.error(f"Databse error during registration: {e}")
+            logging.error(f"Database error during registration: {e}")
 
     return render_template("auth/register.html", form=form)
 
+# Login with email address and password
 @bp.route("/login", methods=["GET", "POST"])
 def login_page():
     # Redirect if user already logged in
@@ -57,6 +59,7 @@ def login_page():
 
     return render_template("auth/login.html", form=form)
 
+# Logout
 @bp.route("/logout")
 def logout_page():
     logout_user()

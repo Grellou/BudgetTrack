@@ -32,10 +32,19 @@ def create_app(config_class="Development"):
     # Blueprints
     from app.routes.auth_routes import bp as AuthBlueprint
     from app.routes.navigation_routes import bp as NavigaionBlueprint
+    from app.routes.category_routes import bp as CategoriesBlueprint
     app.register_blueprint(AuthBlueprint)
     app.register_blueprint(NavigaionBlueprint)
+    app.register_blueprint(CategoriesBlueprint)
     
     # Models for migrations
-    from app.models import user_model
+    from app.models import user_model, category_model
+
+    # CLI commands
+    @app.cli.command("seed-categories")
+    def seed_categories_command():
+        from app.utils.seed_data import seed_default_categories
+        count = seed_default_categories()
+        return f"{count} categories added successfully!"
 
     return app

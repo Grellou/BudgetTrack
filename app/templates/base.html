@@ -23,10 +23,10 @@
         <a class="navbar-brand" href="{{ url_for('navigation.home_page') }}">
           <i class="fas fa-wallet me-2"></i>Budget Tracker
         </a>
-        <button class="navbar-toggler", type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse", id="navbarNav">
+        <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('navigation.home_page') }}">
@@ -37,6 +37,11 @@
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="fas fa-chart-pie me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('categories.category_list_page') }}">
+                <i class="fas fa-tags me-1"></i>Categories
               </a>
             </li>
             <li class="nav-item">
@@ -91,7 +96,7 @@
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismisable fade show" role="alert">
+            <div class="alert alert-{{ category }} alert-dismissable fade show" role="alert">
               {{ message }}
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
