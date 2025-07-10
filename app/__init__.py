@@ -31,14 +31,16 @@ def create_app(config_class="Development"):
 
     # Blueprints
     from app.routes.auth_routes import bp as AuthBlueprint
-    from app.routes.navigation_routes import bp as NavigaionBlueprint
+    from app.routes.navigation_routes import bp as NavigationBlueprint
     from app.routes.category_routes import bp as CategoriesBlueprint
+    from app.routes.expense_routes import bp as ExpensesBlueprint
     app.register_blueprint(AuthBlueprint)
-    app.register_blueprint(NavigaionBlueprint)
+    app.register_blueprint(NavigationBlueprint)
     app.register_blueprint(CategoriesBlueprint)
+    app.register_blueprint(ExpensesBlueprint)
     
     # Models for migrations
-    from app.models import user_model, category_model
+    from app.models import user_model, category_model, expense_model # noqa
 
     # CLI commands
     @app.cli.command("seed-categories")

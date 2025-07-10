@@ -38,7 +38,6 @@ body {
     color: var(--accent) !important;
 }
 
-/* Card styling */
 .card {
     background-color: var(--bg-card);
     border: none;
@@ -56,7 +55,6 @@ body {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-/* Auth card specific styling */
 .auth-card {
     margin-top: 2rem;
     transition: transform 0.3s;
@@ -66,7 +64,6 @@ body {
     transform: translateY(-5px);
 }
 
-/* Form controls */
 .form-control {
     background-color: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -85,7 +82,6 @@ body {
     background-image: none;
 }
 
-/* Button styling */
 .btn-primary {
     background-color: var(--accent);
     border-color: var(--accent);
@@ -96,7 +92,6 @@ body {
     border-color: #4da3e4;
 }
 
-/* Alert styling */
 .alert-success {
     background-color: rgba(129, 199, 132, 0.2);
     color: var(--success);
@@ -141,7 +136,6 @@ body {
   flex: 1;
 }
 
-/* Links */
 a {
     color: var(--accent);
     text-decoration: none;
@@ -152,7 +146,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Footer */
 footer {
     margin-top: auto;
     padding: 20px 0;
@@ -185,7 +178,6 @@ footer {
     }
 }
 
-/* Table styles for dark theme */
 .table {
   color: var(--text-primary);  /* Use the same light text color as rest of the theme */
 }
@@ -241,7 +233,6 @@ footer {
   color: #ffffff;
 }
 
-/* Better styled category counter */
 .badge.rounded-pill {
   padding: 0.35em 0.65em;
   font-weight: 400;
@@ -253,8 +244,61 @@ footer {
   color: #ffffff;
 }
 
-/* Ensure proper vertical alignment with heading */
 h3 .badge {
   position: relative;
   top: -2px;
+}
+
+.form-control, .form-select, .form-control:focus, .form-select:focus {
+  background-color: #2b2b2b;
+  color: var(--text-primary);
+  border-color: #444;
+}
+
+input[type="date"], input[type="number"] {
+  background-color: #2b2b2b !important;
+  color: var(--text-primary) !important;
+}
+
+.table-info {
+  background-color: rgba(75, 120, 175, 0.2) !important;
+  color: var(--text-primary) !important;
+}
+
+.form-control:hover, .form-select:hover {
+  background-color: #333;
+}
+
+.form-control:focus, .form-select:focus {
+  box-shadow: 0 0 0 0.25rem rgba(100, 181, 246, 0.25);
+}
+
+/* Fix alerts and notifications */
+.alert-info {
+  background-color: rgba(75, 120, 175, 0.2);
+  color: var(--text-primary);
+  border-color: rgba(75, 120, 175, 0.3);
+}
+
+/* Fix calendar popup */
+::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+}
+
+tr.table-info {
+  background-color: rgba(75, 120, 175, 0.2) !important; 
+}
+
+tr.table-info td {
+  background-color: rgba(75, 120, 175, 0.2) !important;
+  border-color: rgba(75, 120, 175, 0.3) !important;
+}
+
+tr.table-info .fw-bold {
+  color: var(--accent) !important;
+}
+
+/* Fix any specific border issues */
+.table tr:last-child td {
+  border-bottom-color: rgba(75, 120, 175, 0.3) !important;
 }

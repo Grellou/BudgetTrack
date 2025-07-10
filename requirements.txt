@@ -5,5 +5,6 @@ Flask-WTF
 email-validator
 Flask-Migrate
 Flask-bcrypt
+wtforms_sqlalchemy
 plotly
 pandas
