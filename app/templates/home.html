@@ -34,8 +34,8 @@
                 <h4>Add transaction</h4>
                 <p>Record your income or expenses</p>
                 <div class="d-grid gap-2">
-                  <a class="btn btn-outline-primary" href="#">Add expense</a>
-                  <a class="btn btn-outline-primary" href="#">Add income</a>
+                  <a class="btn btn-outline-primary" href="{{ url_for('expenses.expense_add_page') }}">Add expense</a>
+                  <a class="btn btn-outline-primary" href="{{ url_for('incomes.income_add_page') }}">Add income</a>
                 </div>
               </div>
             </div>

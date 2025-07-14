@@ -114,7 +114,7 @@ def expense_edit_page(id):
 
     return render_template("expenses/form.html", form=form, title="Editing Expense", expense=expense)
 
-# Delete exepse
+# Delete expense
 @bp.route("/expenses/delete/<int:id>", methods=["POST"])
 @login_required
 def expense_delete_page(id):
@@ -125,7 +125,7 @@ def expense_delete_page(id):
         flash("You don't have permissions to delete this expense.", "danger")
         return redirect(url_for("expenses.expense_list_page"))
 
-    # Delete expense
+    # Delete
     try:
         db.session.delete(expense)
         db.session.commit()
