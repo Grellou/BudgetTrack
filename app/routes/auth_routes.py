@@ -8,6 +8,7 @@ import logging
 
 bp = Blueprint("auth", __name__)
 
+
 # Register new account
 @bp.route("/register", methods=["GET", "POST"])
 def register_page():
@@ -17,11 +18,10 @@ def register_page():
 
     form = RegisterForm()
     if form.validate_on_submit():
-
         # Create new user
         user = UserModel(
-            username=form.username.data, # type: ignore
-            email_address=form.email_address.data # type: ignore
+            username=form.username.data,  # type: ignore
+            email_address=form.email_address.data,  # type: ignore
         )
         user.set_password(form.password1.data)
 
@@ -38,16 +38,16 @@ def register_page():
 
     return render_template("auth/register.html", form=form)
 
+
 # Login with email address and password
 @bp.route("/login", methods=["GET", "POST"])
 def login_page():
     # Redirect if user already logged in
     if current_user.is_authenticated:
         return redirect(url_for("navigation.home_page"))
-    
+
     form = LoginForm()
     if form.validate_on_submit():
-        
         user = UserModel.query.filter_by(email_address=form.email_address.data).first()
         # Check if login detail matches
         if user and user.verify_password(form.password.data):
@@ -58,6 +58,7 @@ def login_page():
             flash("Invalid email address or password.", "danger")
 
     return render_template("auth/login.html", form=form)
+
 
 # Logout
 @bp.route("/logout")

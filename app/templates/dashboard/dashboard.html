@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Budget Tracker{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h2><i class="fas fa-chart-pie me-2"></i>My Dashboard</h2>
+      </div>
+      <div class="card-body">
+
+        <!-- Summary cards -->
+        <div class="row mb-4">
+          <!-- Income card -->
+          <div class="col-md-4">
+            <div class="card bg-success text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Income</h5>
+                <h3 class="card-text">${{ data.summary.total_incomes|round(2) }}</h3>
+                <a href="{{ url_for('incomes.income_list_page') }}" class="text-white">
+                  <i class="fas fa-list me-1"></i>View Details
+                </a>
+              </div>
+            </div> 
+          </div>
+        
+          <!-- Expenses card -->
+          <div class="col-md-4">
+            <div class="card bg-danger text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Expenses</h5>
+                <h3 class="card-text">${{ data.summary.total_expenses|round(2) }}</h3>
+                <a href="{{ url_for('expenses.expense_list_page') }}" class="text-white">
+                  <i class="fas fa-list me-1"></i>View Details
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Balance card -->
+          <div class="col-md-4">
+            <div class="card {{ 'bg-primary' if data.summary.remaining >= 0 else 'bg-warning' }} text-white">
+              <div class="card-body">
+                <h5 class="card-title">Remaining Budget</h5>
+                <h3 class="card-text">${{ data.summary.remaining|round(2) }}</h3>
+                {% if data.summary.remaining < 0 %}
+                <span class="badge bg-danger">Warning: Negative Balance</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4><i class="fas fa-history me-2"></i>Recent Transaction</h4>
+          </div>
+          <div class="card-body">
+            {% if data.recent_transactions %}
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Description</th>
+                      <th>Type</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for transaction in data.recent_transactions %}
+                    <tr class="{{ 'table-success' if transaction.type == 'income' else 'table-danger' }}">
+                      <td>{{ transaction.date }}</td>
+                      <td>{{ transaction.description }}</td>
+                      <td>
+                        {% if transaction.type == 'income' %}
+                          <span class="badge bg-success">Income</span>
+                        {% else %}
+                          <span class="badge bg-danger">Expense</span>
+                        {% endif %}
+                      </td>
+                      <td>${{ transaction.amount|round(2) }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <div class="alert alert-info">
+                No recent transactions found. <a href="{{ url_for('expenses.expense_add_page') }}">Add Expense</a> or 
+                <a href="{{ url_for('incomes.income_add_page') }}">record some income</a> to get started!
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Expense Categories Chart -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h4><i class="fas fa-chart-pie me-2"></i>Expense Categories</h4>
+              </div>
+              <div class="card-body">
+                <div id="expense-categories-chart" style="height: 300px">
+                  <!-- Chart will be here -->
+                  <div class="alert alert-secondary">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Category breakdown chart coming soon!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Income vs Expense  Chart -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h4><i class="fas fa-chart-bar me-2"></i>Income vs Expenses</h4>
+              </div>
+              <div class="card-body">
+                <div id="income-expense-chart" style="height: 300px">
+                  <!-- Chart will be here -->
+                  <div class="alert alert-secondary">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Category breakdown chart coming soon!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

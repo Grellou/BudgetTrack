@@ -14,6 +14,7 @@ login_manager.login_view = "auth.login_page"  # type: ignore
 login_manager.login_message_category = "info"
 csrf = CSRFProtect()
 
+
 def create_app(config_class="Development"):
     app = Flask(__name__)
 
@@ -35,15 +36,17 @@ def create_app(config_class="Development"):
     from app.routes.category_routes import bp as CategoriesBlueprint
     from app.routes.expense_routes import bp as ExpensesBlueprint
     from app.routes.income_routes import bp as IncomesBlueprint
+    from app.routes.dashboard_routes import bp as DashboardBlueprint
 
     app.register_blueprint(AuthBlueprint)
     app.register_blueprint(NavigationBlueprint)
     app.register_blueprint(CategoriesBlueprint)
     app.register_blueprint(ExpensesBlueprint)
     app.register_blueprint(IncomesBlueprint)
+    app.register_blueprint(DashboardBlueprint)
 
     # Models for migrations
-    from app.models import user_model, category_model, expense_model  # noqa
+    from app.models import user_model, category_model, expense_model, income_model  # noqa
 
     # CLI commands
     @app.cli.command("seed-categories")
