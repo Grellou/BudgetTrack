@@ -8,6 +8,7 @@ class ExpenseModel(db.Model):
     amount = db.Column(db.Numeric(10, 2), nullable=False)
     date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date) 
     description = db.Column(db.String(128))
+    type = db.Column(db.String(), default="expense")
     notes = db.Column(db.Text)
     
     # Foreign Keys
