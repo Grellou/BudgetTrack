@@ -28,6 +28,20 @@
           </div>
 
           <div class="mb-3">
+            {{ form.type.label(class="form-label") }}
+            {% if form.type.errors %}
+              {{ form.type(class="form-select is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.type.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.type(class="form-select") }}             
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
             {{ form.description.label(class="form-label") }}
             {% if form.description.errors %}
               {{ form.description(class="form-control is-invalid", rows=3) }}
@@ -39,11 +53,6 @@
             {% else %}
               {{ form.description(class="form-control", rows=3) }}
             {% endif %}
-          </div>
-
-          <div class="mb-3 form-check">
-            {{ form.is_essential(class="form-check-input") }}
-            {{ form.is_essential.label(class="form-check-label") }}
           </div>
 
           <div class="d-grid gap-2">

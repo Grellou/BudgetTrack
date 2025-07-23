@@ -6,8 +6,8 @@ class CategoryModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False, unique=True, index=True)
+    type = db.Column(db.String(64))
     description = db.Column(db.String(128))
-    is_essential = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 

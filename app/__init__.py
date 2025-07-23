@@ -46,7 +46,7 @@ def create_app(config_class="Development"):
     app.register_blueprint(DashboardBlueprint)
 
     # Models for migrations
-    from app.models import user_model, category_model, expense_model, income_model  # noqa
+    from app.models import user_model, category_model, expense_model, income_model, credit_model 
 
     # CLI commands
     @app.cli.command("seed-categories")

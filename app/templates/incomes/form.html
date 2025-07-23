@@ -58,6 +58,25 @@
           </div>
 
           <div class="mb-3">
+            {{ form.category_id.label(class="form-label") }}
+            {% if form.category_id.errors %}
+              {{ form.category_id(class="form-select is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.category_id.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.category_id(class="form-select") }}             
+            {% endif %}
+            <div class="form-text">
+              <a href="{{ url_for('categories.category_add_page') }}" target="_blank">
+                <i class="fas fa-plus-circle"></i> Add new category 
+              </a>
+            </div>
+          </div>
+
+          <div class="mb-3">
             {{ form.notes.label(class="form-label") }}
             {{ form.notes(class="form-control", rows=3) }}
           </div>

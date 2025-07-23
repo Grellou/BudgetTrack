@@ -12,13 +12,22 @@ bp = Blueprint("categories", __name__)
 @bp.route("/categories/list")
 @login_required
 def category_list_page():
-    categories = CategoryModel.query.all()
-    return render_template("categories/list.html", categories=categories)
+    expense_categories = CategoryModel.query.filter_by(type="Expense")
+    income_categories = CategoryModel.query.filter_by(type="Income")
+    credit_categories = CategoryModel.query.filter_by(type="Credit")
+    return render_template(
+        "categories/list.html",
+        expense_categories=expense_categories,
+        income_categories=income_categories,
+        credit_categories=credit_categories
+    )
 
 # Create new category
 @bp.route("/categories/add", methods=["GET", "POST"])
 @login_required
 def category_add_page():
+    
+    # Handle expense category form
     form = CategoryForm()
     if form.validate_on_submit():
         
@@ -26,7 +35,7 @@ def category_add_page():
         category = CategoryModel(
             name=form.name.data, # type: ignore
             description=form.description.data, # type: ignore
-            is_essential=form.is_essential.data, # type: ignore
+            type=form.type.data, # type: ignore
             user_id=current_user.id # type: ignore
         )
         
@@ -58,8 +67,8 @@ def category_edit_page(id):
     form = CategoryForm(obj=category)
     if form.validate_on_submit():
         category.name = form.name.data
+        category.type = form.type.data
         category.description = form.description.data
-        category.is_essential = form.is_essential.data
 
         # Add to db
         try:

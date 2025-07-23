@@ -12,6 +12,7 @@ class IncomeModel(db.Model):
     notes = db.Column(db.Text)
 
     # Foreign Key
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     # Timestamps
@@ -19,6 +20,7 @@ class IncomeModel(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationship
+    category = db.relationship("CategoryModel", backref=db.backref("incomes", lazy="dynamic"))
     user = db.relationship("UserModel", backref=db.backref("incomes", lazy="dynamic"))
 
     # For debugging

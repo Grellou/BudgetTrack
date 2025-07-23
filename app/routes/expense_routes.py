@@ -42,7 +42,9 @@ def expense_add_page():
 
     # Get and populate dropdown list with categories
     categories = CategoryModel.query.filter(
-        (CategoryModel.user_id == current_user.id) | (CategoryModel.user_id == None) # noqa
+        ((CategoryModel.user_id == current_user.id) |
+            (CategoryModel.user_id == None )) &
+                (CategoryModel.type == "Expense")
     ).order_by(CategoryModel.name).all()
     form.category_id.choices = [(c.id, c.name) for c in categories]
 

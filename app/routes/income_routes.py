@@ -4,6 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.forms.income_forms import IncomeForm 
 from flask_login import current_user, login_required
 from app import db
+from app.models.category_model import CategoryModel
 from app.models.income_model import IncomeModel
 
 bp = Blueprint("incomes", __name__)
@@ -24,6 +25,15 @@ def income_list_page():
 @login_required
 def income_add_page():
     form = IncomeForm()
+
+    # Get and populate dropdown list with categories
+    categories = CategoryModel.query.filter(
+        ((CategoryModel.user_id == current_user.id) |
+            (CategoryModel.user_id == None )) &
+                (CategoryModel.type == "Income")
+    ).order_by(CategoryModel.name).all()
+    form.category_id.choices = [(c.id, c.name) for c in categories]
+
     if form.validate_on_submit():
 
         # Create income 
@@ -31,6 +41,7 @@ def income_add_page():
             amount=form.amount.data, # type: ignore
             date=form.date.data, # type: ignore
             description=form.description.data, # type: ignore
+            category_id=form.category_id.data, # type: ignore
             notes=form.notes.data, # type: ignore
             user_id=current_user.id # type: ignore
         )
