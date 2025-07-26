@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import DateField, FloatField, SelectField, SubmitField, TextAreaField
+from wtforms import FloatField, SelectField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length, NumberRange, Optional
 
 
-# Expense form
-class ExpenseForm(FlaskForm):
+# Credit form
+class CreditForm(FlaskForm):
     amount = FloatField(
         "Amount",
         validators=[
@@ -12,8 +12,7 @@ class ExpenseForm(FlaskForm):
             NumberRange(min=0.01, message="Amount must be greater than 0"),
         ],
     )
-    date = DateField("Date", validators=[DataRequired()], format="%Y-%m-%d")
     description = TextAreaField("Description", validators=[Length(max=128)])
     category_id = SelectField("Category", coerce=int, validators=[DataRequired()])
     notes = TextAreaField("Notes", validators=[Optional(), Length(max=500)])
-    submit = SubmitField("Save Expense")
+    submit = SubmitField("Save Credit")
