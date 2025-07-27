@@ -1,13 +1,16 @@
 import logging
-from flask import Blueprint, redirect, render_template, flash, url_for
-from sqlalchemy.exc import SQLAlchemyError
-from app.forms.income_forms import IncomeForm 
+
+from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
+from sqlalchemy.exc import SQLAlchemyError
+
 from app import db
+from app.forms.income_forms import IncomeForm
 from app.models.category_model import CategoryModel
 from app.models.income_model import IncomeModel
 
 bp = Blueprint("incomes", __name__)
+
 
 # Display list of all incomes
 @bp.route("/incomes/list")
@@ -18,7 +21,10 @@ def income_list_page():
     # Calculate total
     total_amount = sum(float(income.amount) for income in incomes)
 
-    return render_template("incomes/list.html", incomes=incomes, total_amount=total_amount)
+    return render_template(
+        "incomes/list.html", incomes=incomes, total_amount=total_amount
+    )
+
 
 # Create new income
 @bp.route("/incomes/add", methods=["GET", "POST"])
@@ -27,23 +33,29 @@ def income_add_page():
     form = IncomeForm()
 
     # Get and populate dropdown list with categories
-    categories = CategoryModel.query.filter(
-        ((CategoryModel.user_id == current_user.id) |
-            (CategoryModel.user_id == None )) &
-                (CategoryModel.type == "Income")
-    ).order_by(CategoryModel.name).all()
+    categories = (
+        CategoryModel.query.filter(
+            (
+                (CategoryModel.user_id == current_user.id)
+                | (CategoryModel.user_id == None)
+            )
+            & (CategoryModel.type == "Income")
+        )
+        .order_by(CategoryModel.name)
+        .all()
+    )
     form.category_id.choices = [(c.id, c.name) for c in categories]
 
     if form.validate_on_submit():
 
-        # Create income 
+        # Create income
         income = IncomeModel(
-            amount=form.amount.data, # type: ignore
-            date=form.date.data, # type: ignore
-            description=form.description.data, # type: ignore
-            category_id=form.category_id.data, # type: ignore
-            notes=form.notes.data, # type: ignore
-            user_id=current_user.id # type: ignore
+            amount=form.amount.data,  # type: ignore
+            date=form.date.data,  # type: ignore
+            description=form.description.data,  # type: ignore
+            category_id=form.category_id.data,  # type: ignore
+            notes=form.notes.data,  # type: ignore
+            user_id=current_user.id,  # type: ignore
         )
 
         # Add to db
@@ -57,7 +69,8 @@ def income_add_page():
             flash("Error while adding income. Please try again.", "danger")
             logging.error(f"Database error when adding income: {e}")
 
-    return render_template("incomes/form.html", form=form, title="Add income")
+    return render_template("incomes/form.html", form=form, title="Add Income")
+
 
 # Edit income
 @bp.route("/incomes/edit/<int:id>", methods=["GET", "POST"])
@@ -65,7 +78,7 @@ def income_add_page():
 def income_edit_page(id):
     income = IncomeModel.query.get_or_404(id)
 
-    # Prevent editing other user's incomes 
+    # Prevent editing other user's incomes
     if income.user_id and income.user_id != current_user.id:
         flash("You don't have permissions to edit this income.", "danger")
         return redirect(url_for("incomes.income_list_page"))
@@ -87,16 +100,19 @@ def income_edit_page(id):
         except SQLAlchemyError as e:
             db.session.rollback()
             flash("Error while editing income. Please try again.", "danger")
-            logging.error(f"Database error income expense: {e}")
+            logging.error(f"Database error editing income: {e}")
 
-    return render_template("incomes/form.html", form=form, title="Editing Income", income=income)
+    return render_template(
+        "incomes/form.html", form=form, title="Editing Income", income=income
+    )
+
 
 # Delete income
 @bp.route("/incomes/delete/<int:id>", methods=["POST"])
 @login_required
 def income_delete_page(id):
     income = IncomeModel.query.get_or_404(id)
-    
+
     # Prevent deleting other user's income
     if income.user_id and income.user_id != current_user.id:
         flash("You don't have permissions to delete this income.", "danger")

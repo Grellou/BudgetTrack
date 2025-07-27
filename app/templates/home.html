@@ -32,10 +32,11 @@
               <div class="card-body text-center">
                 <i class="fas fa-plus-circle fa-3x mb-3 text-primary"></i>
                 <h4>Add transaction</h4>
-                <p>Record your income or expenses</p>
+                <p>Record your income, expenses and credit</p>
                 <div class="d-grid gap-2">
                   <a class="btn btn-outline-primary" href="{{ url_for('expenses.expense_add_page') }}">Add expense</a>
                   <a class="btn btn-outline-primary" href="{{ url_for('incomes.income_add_page') }}">Add income</a>
+                  <a class="btn btn-outline-primary" href="{{ url_for('credits.credit_add_page') }}">Add credit</a>
                 </div>
               </div>
             </div>

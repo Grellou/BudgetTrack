@@ -1,5 +1,7 @@
-from app import db
 from datetime import datetime
+
+from app import db
+
 
 class IncomeModel(db.Model):
     __tablename__ = "incomes"
@@ -17,21 +19,25 @@ class IncomeModel(db.Model):
 
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
 
     # Relationship
-    category = db.relationship("CategoryModel", backref=db.backref("incomes", lazy="dynamic"))
+    category = db.relationship(
+        "CategoryModel", backref=db.backref("incomes", lazy="dynamic")
+    )
     user = db.relationship("UserModel", backref=db.backref("incomes", lazy="dynamic"))
 
     # For debugging
     def __repr__(self):
         return f"<Income {self.id}: ${self.amount} on {self.date}>"
-    
+
     # Format amount
     @property
     def formatted_amount(self):
         return f"${float(self.amount):,.2f}"
-    
+
     # Format date
     @property
     def formatted_date(self):
