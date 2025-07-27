@@ -40,8 +40,21 @@
             </div>
           </div>
 
-          <!-- Balance card -->
+          <!-- Credit card -->
           <div class="col-md-4">
+            <div class="card bg-danger text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Credits</h5>
+                <h3 class="card-text">${{ data.summary.total_credits|round(2) }}</h3>
+                <a href="{{ url_for('credits.credit_list_page') }}" class="text-white">
+                  <i class="fas fa-list me-1"></i>View Details
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Balance card -->
+          <div class="col-md-4 mt-4">
             <div class="card {{ 'bg-primary' if data.summary.remaining >= 0 else 'bg-warning' }} text-white">
               <div class="card-body">
                 <h5 class="card-title">Remaining Budget</h5>
@@ -104,6 +117,24 @@
             <div class="card">
               <div class="card-header">
                 <h4><i class="fas fa-chart-pie me-2"></i>Expense Categories</h4>
+              </div>
+              <div class="card-body">
+                <div id="expense-categories-chart" style="height: 300px">
+                  <!-- Chart will be here -->
+                  <div class="alert alert-secondary">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Category breakdown chart coming soon!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Income Categories Chart -->
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h4><i class="fas fa-chart-pie me-2"></i>Income Categories</h4>
               </div>
               <div class="card-body">
                 <div id="expense-categories-chart" style="height: 300px">
