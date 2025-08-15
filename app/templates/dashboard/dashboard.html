@@ -71,8 +71,27 @@
         <div class="card mb-4">
           <div class="card-header">
             <h4><i class="fas fa-history me-2"></i>Recent Transaction</h4>
+            <!-- Date filter -->
+            <form action="{{ url_for('dashboard.dashboard_page') }}" method="get" class="d-flex align-items-center gap-2">
+              <input type="date" name="start_date" class="form-control form-control-sm" value="{{ filters['start_date'] if filters is defined else request.args.get('start_date', '') }}" aria-label="Start date">
+              <span class="mx-1">to</span>
+              <input type="date" name="end_date" class="form-control form-control-sm" value="{{ filters['end_date'] if filters is defined else request.args.get('end_date', '') }}" aria-label="End date">
+              <button type="submit" class="btn btn-primary btn-sm ms-2">Filter
+              </button>
+              <!-- Clear filter -->
+              <a href="{{ url_for('dashboard.dashboard_page') }}" class="btn btn-outline-secondary btn-sm ms-1">Clear</a>
+            </form>
           </div>
           <div class="card-body">
+            {% if filters['start_date'] or filters['end_date'] %}
+              <div class="alert alert-info py-2">
+                Showing results for 
+                <strong>{{ filters['start_date'] or '...' }}</strong>
+                to
+                <strong>{{ filters['end_date'] or '...' }}</strong>
+              </div>
+            {% endif %}
+
             {% if data.recent_transactions %}
               <div class="table-responsive">
                 <table class="table table-hover">
@@ -120,11 +139,10 @@
               </div>
               <div class="card-body">
                 <div id="expense-categories-chart" style="height: 300px">
-                  <!-- Chart will be here -->
-                  <div class="alert alert-secondary">
-                    <i class="fas fa-chart-pie me-2"></i>
-                    Category breakdown chart coming soon!
-                  </div>
+                  <script>
+                    var plotly_data = {{ graphJSON|safe }};
+                    Plotly.newPlot('expense-categories-chart', plotly_data.data, plotly_data.layout)
+                  </script>
                 </div>
               </div>
             </div>
