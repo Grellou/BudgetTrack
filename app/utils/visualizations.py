@@ -1,9 +1,18 @@
-import plotly
-import plotly.graph_objs as go
+import plotly.express as px
+
+template = "plotly_dark"
 
 
-def expense_category_chart(x, y):
+def expense_category_chart(names, values):
+    fig = px.pie(values=values, names=names, template=template)
+    return fig
 
-    # Create basic bar chart
-    fig = go.Figure([go.Bar(x=x, y=y)])
+
+def income_category_chart(names, values):
+    fig = px.pie(values=values, names=names, template=template)
+    return fig
+
+
+def income_vs_expense_chart(names, values):
+    fig = px.pie(values=values, names=names, template=template)
     return fig

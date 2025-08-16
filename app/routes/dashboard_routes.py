@@ -7,11 +7,16 @@ from flask_login import current_user, login_required
 from sqlalchemy import func
 
 from app import db
+from app.models.category_model import CategoryModel
 from app.models.credit_model import CreditModel
 from app.models.expense_model import ExpenseModel
 from app.models.income_model import IncomeModel
 from app.utils.filters import model_filter
-from app.utils.visualizations import expense_category_chart
+from app.utils.visualizations import (
+    expense_category_chart,
+    income_category_chart,
+    income_vs_expense_chart,
+)
 
 bp = Blueprint("dashboard", __name__)
 
@@ -33,6 +38,15 @@ def dashboard_page():
         db.session.query(func.sum(IncomeModel.amount)).filter(*income_filters).scalar()
         or 0
     )
+    income_per_category = (
+        db.session.query(CategoryModel.name, func.sum(IncomeModel.amount))
+        .join(CategoryModel, IncomeModel.category_id == CategoryModel.id)
+        .filter(*income_filters)
+        .group_by(CategoryModel.name)
+        .all()
+    )
+    income_category_names = [name for name, _ in income_per_category]
+    income_category_values = [amount for _, amount in income_per_category]
 
     # Expense queries
     expense_filters = model_filter(ExpenseModel, current_user.id, start_date, end_date)
@@ -42,6 +56,15 @@ def dashboard_page():
         .scalar()
         or 0
     )
+    expenses_per_category = (
+        db.session.query(CategoryModel.name, func.sum(ExpenseModel.amount))
+        .join(CategoryModel, ExpenseModel.category_id == CategoryModel.id)
+        .filter(*expense_filters)
+        .group_by(CategoryModel.name)
+        .all()
+    )
+    expense_category_names = [name for name, _ in expenses_per_category]
+    expense_category_values = [amount for _, amount in expenses_per_category]
 
     # Credit queries
     credit_filters = model_filter(CreditModel, current_user.id, start_date, end_date)
@@ -70,11 +93,34 @@ def dashboard_page():
     # Date values back to form fields dict
     filters = {"start_date": start_str or "", "end_date": end_str or ""}
 
-    # Graph implementation
-    x = ["Feb", "Mar", "May"]
-    y = ["20", "30", "10"]
-    fig = expense_category_chart(x, y)
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    # Expense category graph
+    expense_fig = expense_category_chart(
+        expense_category_names, expense_category_values
+    )
+    expense_category_chart_JSON = json.dumps(
+        expense_fig, cls=plotly.utils.PlotlyJSONEncoder
+    )
+
+    # Income category graph
+    income_fig = income_category_chart(income_category_names, income_category_values)
+    income_category_chart_JSON = json.dumps(
+        income_fig, cls=plotly.utils.PlotlyJSONEncoder
+    )
+
+    # Income vs expense graph
+    income_vs_expense_names = ["Income", "Expense"]
+    income_vs_expense_total_income = dashboard_data["summary"]["total_incomes"]
+    income_vs_expense_total_expenses = dashboard_data["summary"]["total_expenses"]
+    income_vs_expense_values = [
+        income_vs_expense_total_income,
+        income_vs_expense_total_expenses,
+    ]
+    income_vs_expense_fig = income_vs_expense_chart(
+        income_vs_expense_names, income_vs_expense_values
+    )
+    income_vs_expense_chart_JSON = json.dumps(
+        income_vs_expense_fig, cls=plotly.utils.PlotlyJSONEncoder
+    )
 
     return render_template(
         "dashboard/dashboard.html",
@@ -82,7 +128,9 @@ def dashboard_page():
         start=start_str,
         end=end_str,
         filters=filters,
-        graphJSON=graphJSON,
+        expense_category_chart_JSON=expense_category_chart_JSON,
+        income_category_chart_JSON=income_category_chart_JSON,
+        income_vs_expense_chart_JSON=income_vs_expense_chart_JSON,
     )
 
 

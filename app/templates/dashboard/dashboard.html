@@ -16,7 +16,7 @@
         <div class="row mb-4">
           <!-- Income card -->
           <div class="col-md-4">
-            <div class="card bg-success text-white">
+            <div class="card bg-dark text-white">
               <div class="card-body">
                 <h5 class="card-title">Total Income</h5>
                 <h3 class="card-text">${{ data.summary.total_incomes|round(2) }}</h3>
@@ -29,7 +29,7 @@
         
           <!-- Expenses card -->
           <div class="col-md-4">
-            <div class="card bg-danger text-white">
+            <div class="card bg-dark text-white">
               <div class="card-body">
                 <h5 class="card-title">Total Expenses</h5>
                 <h3 class="card-text">${{ data.summary.total_expenses|round(2) }}</h3>
@@ -42,7 +42,7 @@
 
           <!-- Credit card -->
           <div class="col-md-4">
-            <div class="card bg-danger text-white">
+            <div class="card bg-dark text-white">
               <div class="card-body">
                 <h5 class="card-title">Total Credits</h5>
                 <h3 class="card-text">${{ data.summary.total_credits|round(2) }}</h3>
@@ -55,7 +55,7 @@
 
           <!-- Balance card -->
           <div class="col-md-4 mt-4">
-            <div class="card {{ 'bg-primary' if data.summary.remaining >= 0 else 'bg-warning' }} text-white">
+            <div class="card {{ 'bg-dark' if data.summary.remaining >= 0 else 'bg-danger' }} text-white">
               <div class="card-body">
                 <h5 class="card-title">Remaining Budget</h5>
                 <h3 class="card-text">${{ data.summary.remaining|round(2) }}</h3>
@@ -94,7 +94,7 @@
 
             {% if data.recent_transactions %}
               <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-dark table-hover">
                   <thead>
                     <tr>
                       <th>Date</th>
@@ -105,7 +105,7 @@
                   </thead>
                   <tbody>
                     {% for transaction in data.recent_transactions %}
-                    <tr class="{{ 'table-success' if transaction.type == 'income' else 'table-danger' }}">
+                    <tr>
                       <td>{{ transaction.date }}</td>
                       <td>{{ transaction.description }}</td>
                       <td>
@@ -140,7 +140,7 @@
               <div class="card-body">
                 <div id="expense-categories-chart" style="height: 300px">
                   <script>
-                    var plotly_data = {{ graphJSON|safe }};
+                    var plotly_data = {{ expense_category_chart_JSON|safe }};
                     Plotly.newPlot('expense-categories-chart', plotly_data.data, plotly_data.layout)
                   </script>
                 </div>
@@ -155,12 +155,11 @@
                 <h4><i class="fas fa-chart-pie me-2"></i>Income Categories</h4>
               </div>
               <div class="card-body">
-                <div id="expense-categories-chart" style="height: 300px">
-                  <!-- Chart will be here -->
-                  <div class="alert alert-secondary">
-                    <i class="fas fa-chart-pie me-2"></i>
-                    Category breakdown chart coming soon!
-                  </div>
+                <div id="income-categories-chart" style="height: 300px">
+                  <script>
+                    var plotly_data = {{ income_category_chart_JSON|safe }};
+                    Plotly.newPlot('income-categories-chart', plotly_data.data, plotly_data.layout)
+                  </script>
                 </div>
               </div>
             </div>
@@ -174,11 +173,10 @@
               </div>
               <div class="card-body">
                 <div id="income-expense-chart" style="height: 300px">
-                  <!-- Chart will be here -->
-                  <div class="alert alert-secondary">
-                    <i class="fas fa-chart-bar me-2"></i>
-                    Category breakdown chart coming soon!
-                  </div>
+                  <script>
+                    var plotly_data = {{ income_vs_expense_chart_JSON|safe }};
+                    Plotly.newPlot('income-expense-chart', plotly_data.data, plotly_data.layout)
+                  </script>
                 </div>
               </div>
             </div>
