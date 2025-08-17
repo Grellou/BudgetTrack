@@ -73,10 +73,13 @@ def dashboard_page():
         or 0
     )
 
-    # Calculations
+    # Recent transactions calcs
     income_transactions = IncomeModel.query.filter(*income_filters).all()
     expense_transactions = ExpenseModel.query.filter(*expense_filters).all()
-    recent_transactions = income_transactions + expense_transactions
+    credit_transactions = CreditModel.query.filter(*credit_filters).all()
+    recent_transactions = (
+        income_transactions + expense_transactions + credit_transactions
+    )
     recent_transactions.sort(key=lambda t: t.date, reverse=True)
 
     # Data dict

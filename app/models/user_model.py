@@ -1,6 +1,11 @@
 from datetime import datetime
+
+from flask import current_app
 from flask_login import UserMixin
-from app import db, bcrypt, login_manager
+from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
+
+from app import bcrypt, db, login_manager
+
 
 class UserModel(db.Model, UserMixin):
     __tablename__ = "users"
@@ -28,6 +33,34 @@ class UserModel(db.Model, UserMixin):
     # For debugging
     def __repr__(self):
         return f"<User {self.username}>"
+
+    # Generate token for password reset request
+    def generate_password_reset_token(self):
+        serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+        return serializer.dumps(self.email_address, salt=self.password_hash)
+
+    # Check if token is valid and return user
+    @staticmethod
+    def validate_reset_password_token(token, user_id):
+        user = db.session.get(UserModel, user_id)
+        if not user:
+            return None
+
+        serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+        try:
+            token_user_email = serializer.loads(
+                token,
+                max_age=current_app.config["RESET_PASS_TOKEN_MAX_AGE"],
+                salt=user.password_hash,
+            )
+        except (BadSignature, SignatureExpired):
+            return None
+
+        if token_user_email != user.email_address:
+            return None
+
+        return user
+
 
 # User loader
 @login_manager.user_loader

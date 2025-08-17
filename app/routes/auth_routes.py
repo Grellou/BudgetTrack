@@ -1,10 +1,18 @@
+import logging
+
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_user, logout_user
-from app.forms.auth_forms import RegisterForm, LoginForm
-from app.models.user_model import UserModel
 from sqlalchemy.exc import SQLAlchemyError
+
 from app import db
-import logging
+from app.forms.auth_forms import (
+    LoginForm,
+    PasswordResetConfirmForm,
+    PasswordResetForm,
+    RegisterForm,
+)
+from app.models.user_model import UserModel
+from app.utils.mail import send_password_reset_email
 
 bp = Blueprint("auth", __name__)
 
@@ -58,6 +66,71 @@ def login_page():
             flash("Invalid email address or password.", "danger")
 
     return render_template("auth/login.html", form=form)
+
+
+# Password reset
+@bp.route("/password_reset", methods=["GET", "POST"])
+def password_reset_page():
+
+    # Redirect if user already logged in
+    if current_user.is_authenticated:
+        flash(
+            "Already logged in! You can change your password in user settings.",
+            "info",
+        )
+        return redirect(url_for("navigation.home_page"))
+
+    # Handle password reset form
+    form = PasswordResetForm()
+    if form.validate_on_submit():
+        user = UserModel.query.filter_by(email_address=form.email_address.data).first()
+
+        # Redirect and display message if email is invalid
+        if not user:
+            flash("Account with such email address not found!", "danger")
+            return redirect(url_for("auth.password_reset_page"))
+
+        # Send email with password reset URL
+        if user:
+            send_password_reset_email(user)
+            flash(
+                "Password reset instructions were sent to your email address.",
+                "success",
+            )
+
+    return render_template("auth/password_reset.html", form=form)
+
+
+# Password change
+@bp.route("/password_reset/<token>/<int:user_id>", methods=["GET", "POST"])
+def password_reset_confirm_page(token, user_id):
+    # Redirect if user already logged in
+    if current_user.is_authenticated:
+        flash(
+            "Already logged in! You can change your password in user settings.",
+            "info",
+        )
+        return redirect(url_for("navigation.home_page"))
+
+    # Check if reset token is valid
+    user = UserModel.validate_reset_password_token(token, user_id)
+
+    # Redirect and display error if use not found
+    if not user:
+        flash("Error: Account not found.", "danger")
+        return redirect(url_for("navigation.home_page"))
+
+    # Handle password change form
+    form = PasswordResetConfirmForm()
+    if form.validate_on_submit():
+        user.set_password(form.password1.data)
+        db.session.commit()
+        flash("Password has been changed successfully!", "success")
+        return redirect(url_for("navigation.home_page"))
+
+    return render_template(
+        "auth/password_reset_confirm.html", form=form, token=token, user_id=user_id
+    )
 
 
 # Logout
