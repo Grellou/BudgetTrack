@@ -68,7 +68,7 @@ def login_page():
     return render_template("auth/login.html", form=form)
 
 
-# Password reset
+# Password reset request
 @bp.route("/password_reset", methods=["GET", "POST"])
 def password_reset_page():
 
@@ -101,7 +101,7 @@ def password_reset_page():
     return render_template("auth/password_reset.html", form=form)
 
 
-# Password change
+# Password reset confirmation
 @bp.route("/password_reset/<token>/<int:user_id>", methods=["GET", "POST"])
 def password_reset_confirm_page(token, user_id):
     # Redirect if user already logged in
